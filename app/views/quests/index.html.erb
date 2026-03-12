@@ -1,23 +1,108 @@
-<h1>All Quests</h1>
-<%= link_to "Create New Quest", new_quest_path %>
-<%= link_to "Quest Archive!!!",  archive_quests_path %>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="mb-0">Active Quests</h2>
+  <div>
+    <%= link_to "Archive", archive_quests_path, class: "btn btn-outline-secondary me-2" %>
+    <%= link_to "+ New Quest", new_quest_path, class: "btn btn-primary" %>
+  </div>
+</div>
 
-<ul>
-    <% @quests.each do |q| %> 
-    <li>
-        <%= q.title %> - XP: <%= q.xp_reward %>
+<div class="row g-4">
 
-        <%= button_to "Complete",
-            complete_quest_path(q),
-            method: :patch
-        %>
+  <% @quests.each do |q| %>
 
-        <%= link_to "Edit Quest", edit_quest_path(q) %>
-        <%= button_to "Delete Quest", 
-            quest_path(q), 
-            method: :delete, 
-            data: {turbo_confirm: "Are you sure you want to delete this quest?"} 
-        %>
-    </li>
-    <% end  %>
-</ul>
+    <%
+      xp_color =
+      if q.xp_reward >= 70
+        "bg-warning text-dark"
+      elsif q.xp_reward >= 30
+        "bg-info text-dark"
+      else
+        "bg-secondary"
+      end
+    %>
+
+    <div class="col-md-6">
+
+      <div class="card shadow-sm border-0 h-100">
+
+        <div class="card-body">
+
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">
+              <%= q.title %>
+            </h5>
+
+            <span class="badge <%= xp_color %> p-2">
+              +<%= q.xp_reward %> XP
+            </span>
+          </div>
+
+          <p class="card-text mt-2">
+            <%= q.description %>
+          </p>
+
+          <div class="d-flex justify-content-between mt-3">
+
+            <div class="d-flex gap-3">
+
+              <%= button_to "Complete",
+                  complete_quest_path(q),
+                  method: :patch,
+                  class: "btn btn-success btn-sm"
+              %>
+
+              <%= link_to "Edit",
+                  edit_quest_path(q),
+                  class: "btn btn-secondary btn-sm"
+              %>
+
+            </div>
+
+            <button class="btn btn-danger btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteModal<%= q.id %>">
+              Delete
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="modal fade" id="deleteModal<%= q.id %>" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title">Delete Quest</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body">
+            Are you sure you want to delete "<%= q.title %>"?
+          </div>
+
+          <div class="modal-footer">
+
+            <button class="btn btn-secondary" data-bs-dismiss="modal">
+              Cancel
+            </button>
+
+            <%= button_to "Delete",
+                quest_path(q),
+                method: :delete,
+                class: "btn btn-danger"
+            %>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  <% end %>
+
+</div>

@@ -16,7 +16,7 @@ class QuestsController < ApplicationController
     if @quest.save
       redirect_to quests_path
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 

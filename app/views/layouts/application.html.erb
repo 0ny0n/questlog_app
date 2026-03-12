@@ -1,24 +1,3 @@
-<div style="padding:10px; border-bottom:1px solid gray;">
-  <strong><%= current_user.username %></strong>
-
-  <div>
-    Level <%= current_user.level %>
-  </div>
-
-  <div style="background:#ddd; width:200px; height:15px;">
-    <div style="
-      background:green;
-      height:15px;
-      width:<%= (current_user.xp.to_f / current_user.xp_required_for_next_level) * 100 %>%;">
-    </div>
-  </div>
-
-  <small>
-    <%= current_user.xp %> /
-    <%= current_user.xp_required_for_next_level %> XP
-  </small>
-</div>
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -29,22 +8,64 @@
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <%= yield :head %>
-
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
-
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-
   <body>
-    <%= yield %>
+    <%# Defining user for the User data UI %>
+    <% user = User.first %>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+      <div class="container">
+        <%= link_to "QuestLog", root_path, class: "navbar-brand fw-bold" %>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <%= link_to "Home", "/home", class: "nav-link" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "Quests", "/quests", class: "nav-link" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "Archive", archive_quests_path, class: "nav-link" %>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="py-3">
+      <div class="container">
+        <div class="d-flex ml-2 align-items-center">
+          <div>
+            <strong><%= user.username %></strong>
+          </div>
+          <div class="d-flex flex-column ms-3" style="width:170px;">
+            <small>
+              Level <%= user.level %>
+            </small>
+            <div class="progress" style="height:12px;">
+              <div class="progress-bar bg-success"
+                 style="width:<%= (user.xp.to_f / user.xp_required_for_next_level) * 100 %>%">
+              </div>
+            </div>
+            <small class="text-muted">
+              <%= user.xp %> / <%= user.xp_required_for_next_level %> XP
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container mt-4">
+      <%= yield %>
+    </div>
   </body>
 </html>
