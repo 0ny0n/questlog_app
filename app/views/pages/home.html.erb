@@ -1,0 +1,28 @@
+<nav>
+    <%= link_to "Home", "/home"%>
+    <%= link_to "Quest", "/quests"%>
+    <%= link_to "Categories", "/categories"%>
+</nav>
+
+<button class="btn btn-primary">Test Bootstrap</button>
+
+<h1>Welcome to <%= @app_name %></h1>
+<h3>Date: <%= @today %></h3>
+<h3>
+    Time:
+    <span id="clock"><%= @current_time %></span>
+</h3>
+
+<p>your personal quest tracker</p>
+
+<button><%= link_to "View Quest", "/quests" %></button> 
+
+<%# Update time in real time %>
+<script>
+function updateClock() {
+  const now = new Date();
+  document.getElementById("clock").innerText = now.toLocaleTimeString();
+}
+
+setInterval(updateClock, 1000);
+</script>

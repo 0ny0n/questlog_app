@@ -1,0 +1,23 @@
+<h1>All Quests</h1>
+<%= link_to "Create New Quest", new_quest_path %>
+<%= link_to "Quest Archive!!!",  archive_quests_path %>
+
+<ul>
+    <% @quests.each do |q| %> 
+    <li>
+        <%= q.title %> - XP: <%= q.xp_reward %>
+
+        <%= button_to "Complete",
+            complete_quest_path(q),
+            method: :patch
+        %>
+
+        <%= link_to "Edit Quest", edit_quest_path(q) %>
+        <%= button_to "Delete Quest", 
+            quest_path(q), 
+            method: :delete, 
+            data: {turbo_confirm: "Are you sure you want to delete this quest?"} 
+        %>
+    </li>
+    <% end  %>
+</ul>

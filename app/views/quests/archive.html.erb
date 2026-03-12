@@ -1,0 +1,11 @@
+<h1>Archived Quests</h1>
+
+<%= link_to "Back to Active Quests", quests_path %>
+
+<ul>
+  <% @quests.each do |quest| %>
+    <li>
+      <%= quest.title %> (XP: <%= quest.xp_reward %>)
+    </li>
+  <% end %>
+</ul>
