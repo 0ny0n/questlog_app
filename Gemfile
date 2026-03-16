@@ -70,3 +70,6 @@ gem "ruby-lsp", "~> 0.26.7"
 gem "cssbundling-rails", "~> 1.4"
 
 gem "htmlbeautifier"
+
+gem "chartkick"
+gem "groupdate"

@@ -1,28 +1,64 @@
-<nav>
-    <%= link_to "Home", "/home"%>
-    <%= link_to "Quest", "/quests"%>
-    <%= link_to "Categories", "/categories"%>
-</nav>
-
 <%# <button class="btn btn-primary">Test Bootstrap</button> %>
-
 <h1>Welcome to <%= @app_name %></h1>
 <h3>Date: <%= @today %></h3>
 <h3>
-    Time:
-    <span id="clock"><%= @current_time %></span>
+  Time:
+  <span id="clock"><%= @current_time %></span>
 </h3>
+<div class="row mb-4">
+  <div class="col-md-6">
+    <div class="card shadow-sm border-0 text-center p-3">
+      <h6 class="text-muted">Current Quests</h6>
+      <h2><%= @current_quests.count %></h2>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card shadow-sm border-0 text-center p-3">
+      <h6 class="text-muted">Completed Quests</h6>
+      <h2><%= @completed_quests.count %></h2>
+    </div>
+  </div>
+</div>
+<h4 class="mb-3">Active Quests</h4>
+<div class="row">
+  <% @current_quests.each do |q| %>
+    <div class="col-md-6 mb-3">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h6 class="card-title"><%= q.title %></h6>
+          <p class="text-muted small">
+            <%= q.description %>
+          </p>
+          <span class="badge bg-warning text-dark">
+            +<%= q.xp_reward %> XP
+          </span>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
 
-<p>your personal quest tracker</p>
+<div class="card shadow-sm border-0 mt-4 mb-5">
+  <div class="card-body">
+    <h5 class="card-title mb-3">Quest Difficulty Distribution</h5>
 
-<button><%= link_to "View Quest", "/quests" %></button> 
+    <%= pie_chart({
+      "Low (< 30 XP)" => @low_difficulty,
+      "Medium (30-69 XP)" => @medium_difficulty,
+      "High (70+ XP)" => @high_difficulty
+    }, 
+    donut: true, 
+    colors: ["#198754", "#ffc107", "#dc3545"], 
+    legend: "bottom") %>
+  </div>
+</div>
 
 <%# Update time in real time %>
 <script>
-function updateClock() {
-  const now = new Date();
-  document.getElementById("clock").innerText = now.toLocaleTimeString();
-}
+  function updateClock() {
+    const now = new Date();
+    document.getElementById("clock").innerText = now.toLocaleTimeString();
+  }
 
-setInterval(updateClock, 1000);
+  setInterval(updateClock, 1000);
 </script>

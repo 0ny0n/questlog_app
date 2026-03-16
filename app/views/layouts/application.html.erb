@@ -42,6 +42,30 @@
         </div>
       </div>
     </nav>
+    <div class="container mt-3">
+      <% flash.each do |type, message| %>
+        <%
+      bootstrap_class =
+      case type
+      when "success"
+        "alert-success"
+      when "error"
+        "alert-danger"
+      when "warning"
+        "alert-warning"
+      else
+        "alert-info"
+      end
+    %>
+        <div class="alert <%= bootstrap_class %> alert-dismissible fade show shadow-sm" role="alert">
+          <%= message %>
+          <button type="button"
+              class="btn-close"
+              data-bs-dismiss="alert">
+          </button>
+        </div>
+      <% end %>
+    </div>
     <div class="py-3">
       <div class="container">
         <div class="d-flex ml-2 align-items-center">

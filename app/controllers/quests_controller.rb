@@ -14,7 +14,7 @@ class QuestsController < ApplicationController
   def create
     @quest = current_user.quests.new(quest_params) # (params.require(:quest).permit(:title, :description, :xp_reward))
     if @quest.save
-      redirect_to quests_path
+      redirect_to quests_path, flash: { success: "Quest create successfully!" }
     else
       render :new, status: :unprocessable_entity
     end
@@ -28,9 +28,9 @@ class QuestsController < ApplicationController
     @quest = Quest.find(params[:id])
 
     if @quest.update(quest_params)
-      redirect_to quests_path
+      redirect_to quests_path, flash: { success: "Quest updated!" }
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -38,7 +38,7 @@ class QuestsController < ApplicationController
     @quest = Quest.find(params[:id]) # Cari dulu id Quest yg mau didelete
     @quest.destroy
 
-    redirect_to quests_path
+    redirect_to quests_path, flash: { warning: "Quest deleted!" }
   end
 
   def archive
