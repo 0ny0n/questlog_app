@@ -1,10 +1,23 @@
 <%# <button class="btn btn-primary">Test Bootstrap</button> %>
-<h1>Welcome to <%= @app_name %></h1>
-<h3>Date: <%= @today %></h3>
-<h3>
-  Time:
-  <span id="clock"><%= @current_time %></span>
-</h3>
+<div class="card bg-dark text-white shadow-sm border-0 mb-4">
+  <div class="card-body p-4 d-flex flex-column flex-md-row justify-content-between align-items-center">
+    
+    <div class="text-center text-md-start mb-3 mb-md-0">
+      <h2 class="fw-bold mb-1">Welcome to <%= @app_name %></h2>
+      <p class="text-secondary mb-0">Your daily quests await. Let's level up!</p>
+    </div>
+
+    <div class="text-center text-md-end">
+      <h6 class="text-secondary mb-1">
+        <%= @today.strftime("%B %d, %Y") %>
+      </h6>
+      <h4 class="fw-light mb-0">
+        <span id="clock"><%= @current_time %></span>
+      </h4>
+    </div>
+
+  </div>
+</div>
 <div class="row mb-4">
   <div class="col-md-6">
     <div class="card shadow-sm border-0 text-center p-3">
