@@ -8,3 +8,7 @@ pin_all_from "app/javascript/controllers", under: "controllers"
 pin "bootstrap", to: "bootstrap.bundle.min.js"
 pin "chartkick", to: "chartkick.js"
 pin "Chart.bundle", to: "Chart.bundle.js"
+pin "trix"
+pin "@rails/actiontext", to: "actiontext.esm.js"
+pin "lexxy", to: "lexxy.js"
+pin "@rails/activestorage", to: "activestorage.esm.js"  # for attachments

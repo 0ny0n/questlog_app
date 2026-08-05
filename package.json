@@ -3,13 +3,15 @@
   "private": "true",
   "dependencies": {
     "@popperjs/core": "^2.11.8",
+    "@rails/actiontext": "^7.2.302",
     "autoprefixer": "^10.4.27",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
     "nodemon": "^3.1.14",
     "postcss": "^8.5.8",
     "postcss-cli": "^11.0.1",
-    "sass": "^1.98.0"
+    "sass": "^1.98.0",
+    "trix": "^2.1.19"
   },
   "scripts": {
     "build:css:compile": "sass ./app/assets/stylesheets/application.bootstrap.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules",
