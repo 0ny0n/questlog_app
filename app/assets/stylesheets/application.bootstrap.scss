@@ -16,3 +16,19 @@
     column-count: 1;
   }
 }
+
+.mention-chip {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: #0d6efd;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.mention-chip:hover {
+  background: #0a58ca;
+  color: white;
+}
+

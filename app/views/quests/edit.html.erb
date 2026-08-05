@@ -29,9 +29,11 @@
             </div>
 
             <div class="mb-3">
-              <%= f.label :description, class: "form-label" %>
-
-              <%= f.rich_text_area :description %>
+              <%= f.label :description %>
+              <%= f.rich_text_area :description do %>
+                <lexxy-prompt trigger="@" name="mention" src="<%= search_users_path %>" remote-filtering insert-editable-text>
+                </lexxy-prompt>
+              <% end %>
             </div>
 
             <div class="mb-4">

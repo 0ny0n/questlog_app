@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root "pages#home"
   get "/home", to: "pages#home"
-  # get "/quest", to: "pages#quest"
+  get "/quest", to: "pages#quest"
   get "/categories", to: "pages#categories"
   resources :quests do
     member do
@@ -12,6 +12,15 @@ Rails.application.routes.draw do
       get :archive
     end
   end
+
+  post "/switch_user", to: "pages#switch_user"
+
+  resources :users, only: [ :show ] do
+    collection do
+      get :search
+    end
+  end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

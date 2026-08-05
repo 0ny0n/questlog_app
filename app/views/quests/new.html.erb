@@ -13,10 +13,14 @@
             </div>
           <% end %>
         </div>
-        <p>
+        <div class="mb-3">
           <%= form.label :description %>
-          <%= form.rich_text_area :description %>
-        </p>
+          <%= form.rich_text_area :description do %>
+            <lexxy-prompt trigger="@" name="mention" src="<%= search_users_path %>" remote-filtering insert-editable-text>
+            </lexxy-prompt>
+          <% end %>
+        </div>
+
         <div class="mb-3">
           <%= form.label :xp_reward, "XP Reward", class: "form-label" %>
           <%= form.number_field :xp_reward,

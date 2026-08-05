@@ -21,7 +21,7 @@
   </head>
   <body>
     <%# Defining user for the User data UI %>
-    <% user = User.first %>
+    <% user = current_user %>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
       <div class="container">
         <%= link_to "QuestLog", root_path, class: "navbar-brand fw-bold" %>
@@ -38,6 +38,22 @@
             </li>
             <li class="nav-item">
               <%= link_to "Archive", archive_quests_path, class: "nav-link" %>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                <%= current_user.username %>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <% User.order(:username).each do |u| %>
+                  <li>
+                    <%= button_to u.username,
+                                  switch_user_path,
+                                  params: { user_id: u.id },
+                                  method: :post,
+                                  class: "dropdown-item" %>
+                  </li>
+                <% end %>
+              </ul>
             </li>
           </ul>
         </div>

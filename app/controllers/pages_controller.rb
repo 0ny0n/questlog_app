@@ -12,6 +12,11 @@ class PagesController < ApplicationController
     @high_difficulty = @completed_quests.where("xp_reward >= ?", 70).count
   end
 
+  def switch_user
+    session[:user_id] = params[:user_id]
+    redirect_to request.referer || root_path
+  end
+
   def quest
   end
 end

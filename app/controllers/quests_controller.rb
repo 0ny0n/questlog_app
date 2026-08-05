@@ -7,10 +7,6 @@ class QuestsController < ApplicationController
     @quest = Quest.new
   end
 
-  def current_user
-    User.first
-  end
-
   def create
     @quest = current_user.quests.new(quest_params) # (params.require(:quest).permit(:title, :description, :xp_reward))
     if @quest.save
