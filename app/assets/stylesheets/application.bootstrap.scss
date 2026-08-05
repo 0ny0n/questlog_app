@@ -1,2 +1,18 @@
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
+
+.quest-masonry-grid {
+  column-count: 2; 
+  column-gap: 1.5rem; 
+}
+
+.quest-card-wrapper {
+  break-inside: avoid;
+  margin-bottom: 1.5rem; 
+}
+
+@media (max-width: 768px) {
+  .quest-masonry-grid {
+    column-count: 1;
+  }
+}
