@@ -1,0 +1,39 @@
+<!-- Attachment Preview Modal -->
+<div class="modal fade" id="attachmentModal" tabindex="-1" aria-labelledby="attachmentModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content shadow border-0">
+      <div class="modal-header border-bottom-0 pb-0">
+        <div class="d-flex flex-column text-start">
+          <h5 class="modal-title fw-bold text-truncate" id="attachmentModalTitle" style="max-width: 700px;">Attachment Preview</h5>
+          <small class="text-muted" id="attachmentModalMeta"></small>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center p-3" id="attachmentModalBody">
+        <!-- High-res Image Preview -->
+        <img id="attachmentModalImage" src="" alt="Preview" class="img-fluid rounded shadow-sm d-none" style="max-height: 75vh; max-width: 100%; object-fit: contain;">
+
+        <!-- Interactive Full-Resolution PDF Viewer -->
+        <iframe id="attachmentModalPdfFrame" src="" class="w-100 rounded shadow-sm d-none" style="height: 75vh; border: none;"></iframe>
+
+        <!-- Generic File Placeholder -->
+        <div id="attachmentModalFilePlaceholder" class="p-5 bg-light rounded d-none">
+          <i class="bi bi-file-earmark-text text-primary" style="font-size: 4rem;"></i>
+          <h5 class="mt-3 mb-1 fw-semibold" id="attachmentModalFileName"></h5>
+          <p class="text-muted small mb-0" id="attachmentModalFileSize"></p>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0 d-flex justify-content-between pt-0">
+        <a id="attachmentModalOpenTab" href="#" target="_blank" rel="noopener" class="btn btn-outline-secondary btn-sm">
+          <i class="bi bi-box-arrow-up-right me-1"></i> Open in New Tab
+        </a>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+          <a id="attachmentModalDownload" href="#" class="btn btn-primary btn-sm" download>
+            <i class="bi bi-download me-1"></i> Download
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

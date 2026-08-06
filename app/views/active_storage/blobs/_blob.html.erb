@@ -1,14 +1,44 @@
-<figure class="attachment attachment--<%= blob.representable? ? "preview" : "file" %> attachment--<%= blob.filename.extension %>">
-  <% if blob.representable? %>
-    <%= image_tag blob.representation(resize_to_limit: local_assigns[:in_gallery] ? [ 800, 600 ] : [ 1024, 768 ]) %>
-  <% end %>
-
-  <figcaption class="attachment__caption">
-    <% if caption = blob.try(:caption) %>
-      <%= caption %>
+<%
+  if blob.image?
+    preview_url = rails_blob_path(blob, disposition: "inline")
+  elsif blob.representable?
+    preview_url = (rails_representation_path(blob.representation(resize_to_limit: [2048, 2048]), disposition: "inline") rescue rails_blob_path(blob, disposition: "inline"))
+  else
+    preview_url = rails_blob_path(blob, disposition: "inline")
+  end
+  file_url = rails_blob_path(blob, disposition: "inline")
+  download_url = rails_blob_path(blob, disposition: "attachment")
+%>
+<figure class="attachment attachment--<%= blob.representable? ? "preview" : "file" %> attachment--<%= blob.filename.extension %>"
+  data-controller="attachment-preview"
+  data-action="click->attachment-preview#open"
+  data-attachment-preview-filename-value="<%= blob.filename %>"
+  data-attachment-preview-filesize-value="<%= number_to_human_size(blob.byte_size) %>"
+  data-attachment-preview-content-type-value="<%= blob.content_type %>"
+  data-attachment-preview-preview-url-value="<%= preview_url %>"
+  data-attachment-preview-file-url-value="<%= file_url %>"
+  data-attachment-preview-download-url-value="<%= download_url %>">
+  <div class="attachment-card">
+    <% if blob.representable? %>
+      <div class="attachment-thumb-wrapper">
+        <%= image_tag blob.representation(resize_to_limit: [320, 240]), class: "attachment-thumb-img", alt: blob.filename %>
+        <div class="attachment-zoom-badge" title="Preview attachment">
+          <i class="bi bi-arrows-fullscreen"></i>
+        </div>
+      </div>
     <% else %>
-      <span class="attachment__name"><%= blob.filename %></span>
-      <span class="attachment__size"><%= number_to_human_size blob.byte_size %></span>
+      <div class="attachment-file-icon">
+        <i class="bi bi-file-earmark-text"></i>
+      </div>
     <% end %>
-  </figcaption>
+
+    <figcaption class="attachment__caption">
+      <% if caption = blob.try(:caption) %>
+        <span class="attachment__custom-caption"><%= caption %></span>
+      <% else %>
+        <span class="attachment__name" title="<%= blob.filename %>"><%= blob.filename %></span>
+        <span class="attachment__size"><%= number_to_human_size blob.byte_size %></span>
+      <% end %>
+    </figcaption>
+  </div>
 </figure>

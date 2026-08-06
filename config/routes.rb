@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   root "pages#home"
   get "/home", to: "pages#home"
-  get "/quest", to: "pages#quest"
   get "/categories", to: "pages#categories"
   resources :quests do
     member do

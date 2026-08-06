@@ -32,3 +32,142 @@
   color: white;
 }
 
+/* Attachment Card & Compact Preview Styles */
+figure.attachment {
+  display: inline-block;
+  margin: 0.5rem 0.5rem 0.5rem 0;
+  max-width: 240px;
+  vertical-align: top;
+  text-align: left;
+}
+
+.attachment-card {
+  display: inline-flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 6px;
+  max-width: 240px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    border-color: #0d6efd;
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.15);
+    transform: translateY(-2px);
+
+    .attachment-zoom-badge {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+.attachment-thumb-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .attachment-thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.2s ease;
+  }
+}
+
+.attachment-zoom-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(33, 37, 41, 0.75);
+  color: #ffffff;
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  opacity: 0.85;
+  transform: scale(0.95);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 5;
+  backdrop-filter: blur(2px);
+
+  &:hover {
+    opacity: 1;
+    background: #0d6efd;
+    transform: scale(1.08);
+  }
+}
+
+.attachment-file-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 90px;
+  background: #f1f3f5;
+  border-radius: 6px;
+  font-size: 2.2rem;
+  color: #0d6efd;
+}
+
+figure.attachment figcaption.attachment__caption {
+  padding: 6px 4px 2px 4px;
+  font-size: 0.8rem;
+  line-height: 1.25;
+
+  .attachment__name {
+    display: block;
+    font-weight: 600;
+    color: #212529;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 220px;
+  }
+
+  .attachment__size {
+    display: block;
+    color: #6c757d;
+    font-size: 0.75rem;
+  }
+
+  .attachment__custom-caption {
+    display: block;
+    color: #495057;
+    font-size: 0.75rem;
+  }
+}
+
+/* Constrain attachments inside editor and rich text content */
+trix-editor figure.attachment,
+lexxy-editor figure.attachment,
+.lexxy-content figure.attachment,
+.trix-content figure.attachment,
+action-text-attachment figure.attachment {
+  max-width: 240px !important;
+  display: inline-block !important;
+}
+
+trix-editor figure.attachment img,
+lexxy-editor figure.attachment img,
+.lexxy-content figure.attachment img,
+.trix-content figure.attachment img,
+action-text-attachment figure.attachment img {
+  max-width: 100% !important;
+  max-height: 160px !important;
+  object-fit: cover !important;
+}
+
