@@ -67,7 +67,7 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "ruby-lsp", "~> 0.26.7"
+gem "ruby-lsp", "~> 0.26.9"
 
 gem "cssbundling-rails", "~> 1.4"
 
