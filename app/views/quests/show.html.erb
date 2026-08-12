@@ -1,0 +1,108 @@
+<div class="mb-3">
+  <%= link_to "← Back to Quests", quests_path, class: "text-decoration-none" %>
+</div>
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <h1 class="card-title mb-0 fw-bold"><%= @quest.title %></h1>
+          
+          <%
+            xp_color =
+            if @quest.xp_reward >= 70
+              "bg-warning text-dark"
+            elsif @quest.xp_reward >= 30
+              "bg-info text-dark"
+            else
+              "bg-secondary"
+            end
+          %>
+          <span class="badge <%= xp_color %> p-3 fs-5">+<%= @quest.xp_reward %> XP</span>
+        </div>
+
+        <div class="text-muted small mb-4">
+          Created on <%= @quest.created_at.strftime("%B %d, %Y") %>
+        </div>
+
+        <div class="quest-content">
+          <%= render_mentions(@quest.description) %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Party Status</h5>
+      </div>
+      <div class="card-body">
+        
+        <div class="mb-3">
+          <div class="d-flex justify-content-between small mb-1">
+            <span>Overall Progress</span>
+            <span><%= @quest.completed_participants_count %>/<%= @quest.total_participants_count %></span>
+          </div>
+          <div class="progress" style="height: 10px;">
+            <div class="progress-bar bg-success" role="progressbar" style="width: <%= (@quest.completed_participants_count.to_f / @quest.total_participants_count * 100).to_i %>%;"></div>
+          </div>
+        </div>
+
+        <ul class="list-group list-group-flush mb-4">
+          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+            <div>
+              <strong>@<%= @quest.user.username %></strong> <span class="badge bg-primary ms-1">Creator</span>
+            </div>
+            <% if @quest.creator_completed_at.present? %>
+              <span class="text-success"><i class="bi bi-check-circle-fill"></i> Done</span>
+            <% else %>
+              <span class="text-muted small">Pending</span>
+            <% end %>
+          </li>
+          
+          <% @quest.quest_collaborations.each do |collab| %>
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+              <div>
+                @<%= collab.user.username %> <span class="badge bg-secondary ms-1">Collab</span>
+              </div>
+              <% if collab.completed_at.present? %>
+                <span class="text-success"><i class="bi bi-check-circle-fill"></i> Done</span>
+              <% else %>
+                <span class="text-muted small">Pending</span>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+
+        <% if @quest.completed_by?(current_user) %>
+          <div class="alert alert-success text-center py-2 mb-0">
+            ✓ You completed your part!
+          </div>
+        <% else %>
+          <%= button_to complete_quest_path(@quest), method: :patch, class: "btn btn-success w-100 btn-lg" do %>
+            ✓ Complete My Part
+          <% end %>
+        <% end %>
+
+      </div>
+    </div>
+
+    <% if @quest.user_id == current_user.id %>
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-light text-danger">
+          <h6 class="mb-0">Danger Zone (Creator Only)</h6>
+        </div>
+        <div class="card-body">
+          <div class="d-grid gap-2">
+            <%= link_to "Edit Quest", edit_quest_path(@quest), class: "btn btn-outline-secondary" %>
+            <%= button_to "Delete Quest", quest_path(@quest), method: :delete, form: { data: { turbo_confirm: 'Are you sure?' } }, class: "btn btn-outline-danger" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+  </div>
+</div>

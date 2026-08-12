@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_05_044459) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_12_092413) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -49,9 +49,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_05_044459) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "quest_collaborations", force: :cascade do |t|
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.integer "quest_id", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["quest_id", "user_id"], name: "index_quest_collaborations_on_quest_id_and_user_id", unique: true
+    t.index ["quest_id"], name: "index_quest_collaborations_on_quest_id"
+    t.index ["user_id"], name: "index_quest_collaborations_on_user_id"
+  end
+
   create_table "quests", force: :cascade do |t|
     t.boolean "completed", default: false, null: false
     t.datetime "created_at", null: false
+    t.datetime "creator_completed_at"
     t.text "description"
     t.string "title"
     t.datetime "updated_at", null: false
@@ -70,5 +82,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_05_044459) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "quest_collaborations", "quests", on_delete: :cascade
+  add_foreign_key "quest_collaborations", "users", on_delete: :cascade
   add_foreign_key "quests", "users"
 end

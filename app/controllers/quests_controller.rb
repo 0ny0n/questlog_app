@@ -1,6 +1,16 @@
 class QuestsController < ApplicationController
+  before_action :set_quest, only: [ :show, :edit, :update, :destroy, :complete ]
+  before_action :authorize_creator!, only: [ :edit, :update, :destroy ]
+
   def index
-    @quests = Quest.where(completed: false)
+    base_query = Quest.visible_to(current_user).where(completed: false)
+    @quests = apply_tab_filter(base_query)
+  end
+
+  def show
+    unless @quest.user_id == current_user.id || @quest.collaborators.include?(current_user)
+      redirect_to quests_path, flash: { danger: "You are not authorized to view this quest." }
+    end
   end
 
   def new
@@ -8,49 +18,70 @@ class QuestsController < ApplicationController
   end
 
   def create
-    @quest = current_user.quests.new(quest_params) # (params.require(:quest).permit(:title, :description, :xp_reward))
+    @quest = current_user.quests.new(quest_params)
     if @quest.save
-      redirect_to quests_path, flash: { success: "Quest create successfully!" }
+      redirect_to quests_path, flash: { success: "Quest created successfully!" }
     else
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
-    @quest = Quest.find(params[:id])
   end
 
   def update
-    @quest = Quest.find(params[:id])
-
     if @quest.update(quest_params)
-      redirect_to quests_path, flash: { success: "Quest updated!" }
+      redirect_to @quest, flash: { success: "Quest updated!" }
     else
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
-    @quest = Quest.find(params[:id]) # Cari dulu id Quest yg mau didelete
     @quest.destroy
-
     redirect_to quests_path, flash: { warning: "Quest deleted!" }
   end
 
   def archive
-    @quests = Quest.where(completed: true)
+    base_query = Quest.visible_to(current_user).where(completed: true)
+    @quests = apply_tab_filter(base_query)
   end
 
   def complete
-    @quest = Quest.find(params[:id])
-    @quest.update(completed: true)
+    @quest.mark_participant_complete!(current_user)
 
-    current_user.gain_xp(@quest.xp_reward)
+    if @quest.completed?
+      flash[:success] = "All adventurers completed the quest! Quest archived."
+    else
+      flash[:success] = "You completed your part! (+#{@quest.xp_reward} XP earned)"
+    end
 
-    redirect_to quests_path
+    redirect_to request.referer || quests_path
   end
 
   private
+
+  def set_quest
+    @quest = Quest.find(params[:id])
+  end
+
+  def authorize_creator!
+    unless @quest.user_id == current_user.id
+      redirect_to quests_path, flash: { danger: "Only the creator can perform this action." }
+    end
+  end
+
+  def apply_tab_filter(query)
+    case params[:filter]
+    when "my_quests"
+      query.created_by(current_user)
+    when "shared"
+      query.collaborative
+    else # "all"
+      query
+    end
+  end
+
   def quest_params
     params.require(:quest).permit(:title, :description, :xp_reward)
   end

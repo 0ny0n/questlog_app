@@ -6,10 +6,20 @@
   </div>
 </div>
 
+<ul class="nav nav-pills mb-4">
+  <li class="nav-item">
+    <%= link_to "All Quests", quests_path(filter: "all"), class: "nav-link #{'active' if params[:filter].blank? || params[:filter] == 'all'}" %>
+  </li>
+  <li class="nav-item">
+    <%= link_to "My Quests", quests_path(filter: "my_quests"), class: "nav-link #{'active' if params[:filter] == 'my_quests'}" %>
+  </li>
+  <li class="nav-item">
+    <%= link_to "Shared", quests_path(filter: "shared"), class: "nav-link #{'active' if params[:filter] == 'shared'}" %>
+  </li>
+</ul>
+
 <div class="quest-masonry-grid">
-
   <% @quests.each do |q| %>
-
     <%
       xp_color =
       if q.xp_reward >= 70
@@ -22,87 +32,53 @@
     %>
 
     <div class="quest-card-wrapper">
-
-      <div class="card shadow-sm border-0">
-
-        <div class="card-body p-2">
-
-          <div class="d-flex justify-content-between align-items-center">
-            <h3 class="card-title mb-0">
-              <%= q.title %>
-            </h5>
-
-            <span class="badge <%= xp_color %> p-2">
-              +<%= q.xp_reward %> XP
-            </span>
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body p-3 d-flex flex-column">
+          
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h5 class="card-title mb-0 fw-bold"><%= q.title %></h5>
+            <span class="badge <%= xp_color %> p-2">+<%= q.xp_reward %> XP</span>
           </div>
 
-          <div class="card-text mt-2">
+          <div class="mb-2">
+            <% if q.user_id == current_user.id %>
+              <span class="badge bg-primary text-light me-1 mb-1">👑 Created by You</span>
+            <% else %>
+              <span class="badge bg-secondary text-light me-1 mb-1">👑 Created by @<%= q.user.username %></span>
+            <% end %>
+
+            <% q.collaborators.each do |collab| %>
+              <span class="badge bg-light text-dark border me-1 mb-1">👥 @<%= collab.username %></span>
+            <% end %>
+          </div>
+
+          <% if q.total_participants_count > 1 %>
+            <div class="mb-2">
+              <small class="text-muted"><%= q.completed_participants_count %>/<%= q.total_participants_count %> Ready</small>
+              <div class="progress" style="height: 5px;">
+                <div class="progress-bar bg-success" role="progressbar" style="width: <%= (q.completed_participants_count.to_f / q.total_participants_count * 100).to_i %>%;"></div>
+              </div>
+            </div>
+          <% end %>
+
+          <div class="card-text mt-2 quest-body-clamped flex-grow-1">
             <%= render_mentions(q.description) %>
           </div>
+          
+          <%= link_to "View Full Quest →", quest_path(q), class: "text-decoration-none small mt-2 d-inline-block" %>
 
-          <div class="d-flex justify-content-between mt-3">
-
-            <div class="d-flex gap-3">
-
-              <%= button_to "Complete",
-                  complete_quest_path(q),
-                  method: :patch,
-                  class: "btn btn-success btn-sm"
-              %>
-
-              <%= link_to "Edit",
-                  edit_quest_path(q),
-                  class: "btn btn-secondary btn-sm"
-              %>
-
-            </div>
-
-            <button class="btn btn-danger btn-sm"
-                    data-bs-toggle="modal"
-                    data-bs-target="#deleteModal<%= q.id %>">
-              Delete
-            </button>
-
+          <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+            <% if q.completed_by?(current_user) %>
+              <span class="text-success small"><i class="bi bi-check-circle-fill"></i> Your Part Done</span>
+            <% else %>
+              <%= button_to complete_quest_path(q), method: :patch, class: "btn btn-success btn-sm w-100" do %>
+                ✓ Complete My Part
+              <% end %>
+            <% end %>
           </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="modal fade" id="deleteModal<%= q.id %>" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-
-          <div class="modal-header">
-            <h5 class="modal-title">Delete Quest</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-
-          <div class="modal-body">
-            Are you sure you want to delete "<%= q.title %>"?
-          </div>
-
-          <div class="modal-footer">
-
-            <button class="btn btn-secondary" data-bs-dismiss="modal">
-              Cancel
-            </button>
-
-            <%= button_to "Delete",
-                quest_path(q),
-                method: :delete,
-                class: "btn btn-danger"
-            %>
-
-          </div>
-
+          
         </div>
       </div>
     </div>
-
   <% end %>
-
 </div>

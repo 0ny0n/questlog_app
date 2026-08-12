@@ -1,5 +1,7 @@
 class User < ApplicationRecord
   has_many :quests
+  has_many :quest_collaborations, dependent: :destroy
+  has_many :collaborated_quests, through: :quest_collaborations, source: :quest
 
   def gain_xp(amount)
     self.xp += amount
